@@ -10,6 +10,10 @@ fake demo values.
 |---|---|---|
 | Lint / static analysis | flake8 + flake8-bandit | `.github/workflows/ci.yml` (`lint` job) |
 | Unit tests | pytest | `.github/workflows/ci.yml` (`test` job) |
+| Dependency scanning (SCA) | Dependabot alerts, security and version updates | `.github/dependabot.yml` |
+| SAST | CodeQL (`security-extended`, Python + Actions) | `.github/workflows/codeql.yml` |
+| Severity gate | fails the build on security-severity >= 7.0 | `.github/scripts/sarif_gate.py` |
+| Workflow hardening | actions pinned to full commit SHAs, least-privilege `permissions` | all workflows |
 
 Run locally:
 
