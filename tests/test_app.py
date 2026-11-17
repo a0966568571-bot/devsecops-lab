@@ -60,3 +60,14 @@ def test_export_returns_file(client):
 
 def test_greet(client):
     assert b"Hello amy" in client.get("/greet?name=amy").data
+
+
+def test_export_blocks_path_traversal(client):
+    for name in ["../app.py", "../../requirements.txt", "/etc/passwd"]:
+        assert client.get("/export", query_string={"name": name}).status_code == 404
+
+
+def test_greet_escapes_html(client):
+    r = client.get("/greet", query_string={"name": "<script>alert(1)</script>"})
+    assert b"<script>" not in r.data
+    assert b"&lt;script&gt;" in r.data

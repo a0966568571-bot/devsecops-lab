@@ -8,7 +8,8 @@ import sqlite3
 import subprocess  # noqa: S404 - reviewed: fixed argv list, never a shell
 
 import yaml
-from flask import Flask, request, jsonify, abort, send_file
+from flask import Flask, request, jsonify, abort, send_from_directory
+from markupsafe import escape
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
@@ -69,13 +70,16 @@ def add_note():
 @app.route("/greet")
 def greet():
     name = request.args.get("name", "guest")
-    return f"<p>Hello {name}!</p>"
+    # escape() turns <script> into &lt;script&gt; (fixes py/reflective-xss)
+    return f"<p>Hello {escape(name)}!</p>"
 
 
 @app.route("/export")
 def export_note():
     name = request.args.get("name", "welcome.txt")
-    return send_file(os.path.join(EXPORT_DIR, name))
+    # send_from_directory uses safe_join: "../app.py" is rejected with 404
+    # (fixes py/path-injection)
+    return send_from_directory(EXPORT_DIR, name)
 
 
 @app.route("/import", methods=["POST"])
