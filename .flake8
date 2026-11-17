@@ -1,0 +1,6 @@
+[flake8]
+max-line-length = 100
+exclude = .venv,.git,__pycache__
+# tests use plain assert on purpose (pytest style)
+per-file-ignores =
+    tests/*: S101

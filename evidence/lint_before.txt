@@ -1,0 +1,20 @@
+7.5.0 (flake8-bandit: 4.1.1, mccabe: 0.7.0, pycodestyle: 2.15.0, pyflakes:
+4.1.0) CPython 3.15.1 on Darwin
+$ flake8 src/ tests/
+src/notes_app/app.py:2:1: F401 'os' imported but unused
+src/notes_app/app.py:4:1: S404 Consider possible security implications associated with the subprocess module.
+src/notes_app/app.py:6:1: S403 Consider possible security implications associated with pickle module.
+src/notes_app/app.py:16:1: S105 Possible hardcoded password: 'admin-demo-123'
+src/notes_app/app.py:27:1: S324 Use of weak MD5 hash for security. Consider usedforsecurity=False
+src/notes_app/app.py:31:1: S311 Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+src/notes_app/app.py:42:1: S101 Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+src/notes_app/app.py:49:1: S608 Possible SQL injection vector through string-based query construction.
+src/notes_app/app.py:65:1: S506 Use of unsafe yaml load. Allows instantiation of arbitrary objects. Consider yaml.safe_load().
+src/notes_app/app.py:72:1: S301 Pickle and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue.
+src/notes_app/app.py:73:1: S110 Try, Except, Pass detected.
+src/notes_app/app.py:73:5: E722 do not use bare 'except'
+src/notes_app/app.py:81:1: S602 subprocess call with shell=True identified, security issue.
+src/notes_app/app.py:82:35: E225 missing whitespace around operator
+src/notes_app/app.py:86:1: S201 A Flask app appears to be run with debug=True, which exposes the Werkzeug debugger and allows the execution of arbitrary code.
+src/notes_app/app.py:86:1: S104 Possible binding to all interfaces.
+exit code: 1
