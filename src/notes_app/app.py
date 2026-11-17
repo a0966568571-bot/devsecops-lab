@@ -8,7 +8,7 @@ import sqlite3
 import subprocess  # noqa: S404 - reviewed: fixed argv list, never a shell
 
 import yaml
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, send_file
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
@@ -19,6 +19,7 @@ ADMIN_PASSWORD_HASH = generate_password_hash(
     os.environ.get("ADMIN_PASSWORD", secrets.token_urlsafe(16))
 )
 DB_PATH = "notes.db"
+EXPORT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "exports")
 
 
 def get_db():
@@ -63,6 +64,18 @@ def add_note():
     conn.execute("INSERT INTO notes (owner, body) VALUES (?, ?)", (owner, body))
     conn.commit()
     return jsonify(ok=True), 201
+
+
+@app.route("/greet")
+def greet():
+    name = request.args.get("name", "guest")
+    return f"<p>Hello {name}!</p>"
+
+
+@app.route("/export")
+def export_note():
+    name = request.args.get("name", "welcome.txt")
+    return send_file(os.path.join(EXPORT_DIR, name))
 
 
 @app.route("/import", methods=["POST"])
