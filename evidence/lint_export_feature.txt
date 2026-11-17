@@ -1,0 +1,2 @@
+$ flake8 src/ tests/
+exit code: 0

@@ -50,3 +50,24 @@ def test_restore_uses_json_not_pickle(client):
 
 def test_ping_rejects_shell_injection(client):
     assert client.get("/ping", query_string={"host": "127.0.0.1; rm -rf /"}).status_code == 400
+
+
+def test_export_returns_file(client):
+    r = client.get("/export", query_string={"name": "welcome.txt"})
+    assert r.status_code == 200
+    assert b"Welcome" in r.data
+
+
+def test_greet(client):
+    assert b"Hello amy" in client.get("/greet?name=amy").data
+
+
+def test_export_blocks_path_traversal(client):
+    for name in ["../app.py", "../../requirements.txt", "/etc/passwd"]:
+        assert client.get("/export", query_string={"name": name}).status_code == 404
+
+
+def test_greet_escapes_html(client):
+    r = client.get("/greet", query_string={"name": "<script>alert(1)</script>"})
+    assert b"<script>" not in r.data
+    assert b"&lt;script&gt;" in r.data
