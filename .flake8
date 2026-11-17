@@ -1,6 +1,6 @@
 [flake8]
 max-line-length = 100
 exclude = .venv,.git,__pycache__
-# tests use plain assert on purpose (pytest style)
+# tests: plain assert is pytest style (S101); fake passwords in tests are not secrets (S105)
 per-file-ignores =
-    tests/*: S101
+    tests/*: S101,S105
